@@ -15,5 +15,5 @@ public class BikeInsurance extends Insurance {
 	private BikeType bikeType;
 	
 	@Getter @Setter
-	private PersonType personType;
+	private BikeInsurantType bikeInsurantType;
 }
