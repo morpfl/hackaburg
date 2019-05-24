@@ -1,6 +1,11 @@
 package com.hackathon.ibot.homecontents;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import com.hackathon.ibot.Insurance;
+import com.hackathon.ibot.InsuranceType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +14,9 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class HomeContents extends Insurance {
-	@Getter @Setter
+	@Getter @Setter @Enumerated(EnumType.STRING)
 	private HomecontentsInsurantType homecontentsInsurantType;
 	
 	@Getter @Setter
@@ -19,5 +25,9 @@ public class HomeContents extends Insurance {
 	public boolean hasNullField() {
 		if(homecontentsInsurantType == null || living_space_in_square_meters == 0) return true;
 		return false;
+	}
+
+	public HomeContents(InsuranceType homecontents) {
+		super(homecontents);
 	}
 }

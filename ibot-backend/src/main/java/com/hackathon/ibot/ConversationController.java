@@ -1,6 +1,7 @@
 package com.hackathon.ibot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,17 +15,13 @@ public class ConversationController {
 	
 	@PostMapping("/api/information")
 	public ResponseEntity<ConversationResponseDTO> receiveNewInformation(@RequestBody ConversationRequestDTO requestDTO){
-		this.service.extractInformation(requestDTO);
-		
-		/*TODO:
-		 * falls id nicht existiert: id noch nicht vorhanden
+		ConversationResponseDTO response = this.service.persistInformation(requestDTO);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
 	
-		 * typ auslesen/auf Versicherung mappen und neue Versicherung zur Conversation hinzufügen
-		 * RequestProperty auslesen und auf Property der Versicherung setzen (Setters)
-		 * schauen ob noch null properties existieren 
-		 * falls ja, is finished = true
-		 * falls nein, is finished = false
-		 */
+	@PostMapping("/api/test")
+	public void test() {
+		this.service.testmethod();
 	}
 	
 

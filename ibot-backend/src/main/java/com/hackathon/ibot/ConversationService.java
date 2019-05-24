@@ -23,8 +23,14 @@ import com.hackathon.ibot.liability.LiabilityInsuredAmount;
 @Service
 public class ConversationService {
 	
-	@Autowired
 	private ConversationRepository repository;
+	
+	private InsuranceRepository insuranceRepository;
+	
+	public ConversationService(ConversationRepository repository, InsuranceRepository insuranceRepository) {
+		this.repository = repository;
+		this.insuranceRepository = insuranceRepository;
+	}
 	
 	public boolean idExists(int id) {
 		List<Conversation> allConversations = (List<Conversation>) this.repository.findAll();
@@ -37,11 +43,30 @@ public class ConversationService {
 	
 	public ConversationResponseDTO persistInformation(ConversationRequestDTO request) {
 		boolean alreadyFinished = false;
-		Insurance insurance = mapTypeToInsurance(request.getType());
+		Conversation conversation;
+		Insurance insurance;
 		
-		if(!idExists(request.getId())) {		
-			Conversation conversation = new Conversation(request.getId());
+		if(!idExists(request.getId())) {
+			conversation = new Conversation(request.getId());
+			insurance = mapTypeToInsurance(request.getType());
+			
+			this.repository.save(conversation);
+			this.insuranceRepository.save(insurance);
+			
 			conversation.addInsurance(insurance);
+			this.repository.save(conversation);
+			
+			System.out.println(this.repository.findById(request.getId()).orElse(null));
+		}
+		
+		else {
+			conversation = repository.findById(request.getId()).orElse(null);
+			insurance = mapTypeToInsurance(request.getType());		
+		}
+	
+			
+			int index = conversation.getInsurances().indexOf(insurance);
+			System.out.println(index);
 			
 			if(insurance instanceof BikeInsurance) mapBikeProperty(conversation, (BikeInsurance) insurance, request.getKey(), request.getValue());
 			if(insurance instanceof CarInsurance) mapCarProperty(conversation, (CarInsurance) insurance, request.getKey(), request.getValue());
@@ -49,12 +74,18 @@ public class ConversationService {
 			if(insurance instanceof HomeInsurance) mapHomeProperty(conversation, (HomeInsurance) insurance, request.getKey(), request.getValue());
 			if(insurance instanceof LiabilityInsurance) mapLiabilityProperty(conversation, (LiabilityInsurance) insurance, request.getKey(), request.getValue());
 			
-		}
-		
-		if(!insurance.hasNullField()) alreadyFinished = true;
-		
-		ConversationResponseDTO response = buildResponse(request.getId(), alreadyFinished, request.getType());
-		return response;
+
+			
+			if(!hasNullField(request.getId(), insurance, index)) alreadyFinished = true;
+			ConversationResponseDTO response = buildResponse(request.getId(), alreadyFinished, request.getType());
+			return response;
+	}
+
+	private boolean hasNullField(int id, Insurance insurance, int index) {
+		System.out.println(this.repository.findById(id).orElse(null));
+		List<Insurance> insurances = this.repository.findById(id).orElse(null).getInsurances();
+		if(insurances.get(index).hasNullField()) return true;
+		return false;
 	}
 
 	private ConversationResponseDTO buildResponse(int id, boolean alreadyFinished, String type) {
@@ -68,8 +99,10 @@ public class ConversationService {
 		switch (property) {
 		case "liabilityType":
 			insurance.setLiabilityType(LiabilityType.valueOf(value));
+			break;
 		case "insuredAmount":
 			insurance.setLiabilityInsuredAmount(LiabilityInsuredAmount.valueOf(value));
+			break;
 		}
 		conversation.getInsurances().set(index,insurance);
 		this.repository.save(conversation);
@@ -82,12 +115,16 @@ public class ConversationService {
 		switch (property) {
 		case "houseType":
 			insurance.setHouseType(HouseType.valueOf(value));
+			break;
 		case "insuredAmount":
 			insurance.setInsuredAmount(InsuredAmount.valueOf(value));
+			break;
 		case "age":
 			insurance.setAge(Integer.parseInt(value));
+			break;
 		case "size":
 			insurance.setSize(Integer.parseInt(value));
+			break;
 		}
 		
 		conversation.getInsurances().set(index,insurance);
@@ -100,8 +137,10 @@ public class ConversationService {
 		switch (property) {
 		case "homecontentsInsurantType":
 			insurance.setHomecontentsInsurantType(HomecontentsInsurantType.valueOf(value));
+			break;
 		case "living_space_in_square_meters":
 			insurance.setLiving_space_in_square_meters(Integer.parseInt(value));
+			break;
 		}
 		conversation.getInsurances().set(index,insurance);
 		this.repository.save(conversation);
@@ -113,8 +152,10 @@ public class ConversationService {
 		switch (property) {
 		case "carType":
 			insurance.setCarType(CarType.valueOf(value));
+			break;
 		case "areaType":
 			insurance.setAreaType(AreaType.valueOf(value));
+			break;
 		}
 		conversation.getInsurances().set(index,insurance);
 		this.repository.save(conversation);
@@ -126,8 +167,10 @@ public class ConversationService {
 		switch (property) {
 		case "bikeType":
 			insurance.setBikeType(BikeType.valueOf(value));
+			break;
 		case "insurantType":
 			insurance.setBikeInsurantType(BikeInsurantType.valueOf(value));
+			break;
 		}
 		conversation.getInsurances().set(index,insurance);
 		this.repository.save(conversation);
@@ -136,17 +179,26 @@ public class ConversationService {
 	private Insurance mapTypeToInsurance(String type) {
 		switch(type) {
 		case "Car":
-			return new CarInsurance();
+			System.out.println(type);
+			return new CarInsurance(InsuranceType.CAR);
 		case "Bike":
-			return new BikeInsurance();
+			return new BikeInsurance(InsuranceType.BIKE);
 		case "Homecontents":
-			return new HomeContents();
+			return new HomeContents(InsuranceType.HOMECONTENTS);
 		case "Home":
-			return new HomeInsurance();
+			return new HomeInsurance(InsuranceType.HOUSE);
 		case "Lilability":
-			return new LiabilityInsurance();
+			return new LiabilityInsurance(InsuranceType.LIABILITY);
 		default:
 			return null;
 		}
+	}
+	
+	public void testmethod() {
+		Conversation conversation = new Conversation(1);
+		this.repository.save(conversation);
+		System.out.println(this.repository.findById(1).orElse(null));
+		Insurance insurance = mapTypeToInsurance("Car");
+		this.insuranceRepository.save(insurance);
 	}
 }
