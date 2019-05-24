@@ -35,9 +35,10 @@ public class ConversationService {
 		return false;
 	}
 	
-	public void extractInformation(ConversationRequestDTO request) {
+	public ConversationResponseDTO persistInformation(ConversationRequestDTO request) {
 		boolean alreadyFinished = false;
 		Insurance insurance = mapTypeToInsurance(request.getType());
+		
 		if(!idExists(request.getId())) {		
 			Conversation conversation = new Conversation(request.getId());
 			conversation.addInsurance(insurance);
@@ -50,20 +51,15 @@ public class ConversationService {
 			
 		}
 		
-		if(insurance.hasNullField()) alreadyFinished = true;
+		if(!insurance.hasNullField()) alreadyFinished = true;
 		
-		/*TODO:
-		 * schauen ob noch null properties existieren 
-		 * falls ja, is finished = true
-		 * falls nein, is finished = false
-		 */
-		
+		ConversationResponseDTO response = buildResponse(request.getId(), alreadyFinished, request.getType());
+		return response;
 	}
-	
-	private boolean nullStillExists() {
-		for(Field field : getClass().getDeclaredFields()) {
-			
-		}
+
+	private ConversationResponseDTO buildResponse(int id, boolean alreadyFinished, String type) {
+		ConversationResponseDTO response = new ConversationResponseDTO(id, alreadyFinished, type);
+		return response;
 	}
 
 	private void mapLiabilityProperty(Conversation conversation, LiabilityInsurance insurance, String property,
