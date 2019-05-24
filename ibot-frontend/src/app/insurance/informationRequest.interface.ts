@@ -1,5 +1,5 @@
 export interface InformationRequest {
-  id: number;
+  id?: string;
   type?: string;
   key: string;
   value: string;
