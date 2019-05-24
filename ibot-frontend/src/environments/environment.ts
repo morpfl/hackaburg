@@ -13,7 +13,12 @@ export const environment = {
     getstudentstatus: 'Bike',
     getcartype: 'Car',
     getareatype: 'Car',
-    getkilometers_per_year: 'Car'
+    getkilometers_per_year: 'Car',
+    getlivingspacesize: 'HomeContents',
+    getllivingstatus: 'HomeContents',
+    getage: 'Home',
+    gethousetype: 'Home',
+    gethome_insurance_amount: 'Home'
   },
   dataFields: [
     'cartype',
@@ -26,6 +31,7 @@ export const environment = {
     'housetype',
     'age',
     'size',
-    'living_space_in_square_meters'
+    'living_space_in_square_meters',
+    'money'
   ]
 };
