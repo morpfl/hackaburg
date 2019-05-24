@@ -4,7 +4,7 @@ import { isNumber, isString } from 'util';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SessionService } from '../session/session.service';
 import { Observable } from 'rxjs';
-import { DialogResponse } from './dialogResponse.interface';
+import { DialogResponse, Intent } from './dialogResponse.interface';
 import { environment } from 'src/environments/environment';
 import { Message } from './message.interface';
 
@@ -51,6 +51,24 @@ export class BotService {
       });
     });
     return messages;
+  }
+
+  processIntent(response: DialogResponse): void {
+    let mlIntent: Intent = null;
+    response.results.nlp.intents.forEach( intent => {
+      if (mlIntent === null || intent.confidence > mlIntent.confidence) {
+        mlIntent = intent;
+      }
+    });
+    if (environment.insuranceTypes.includes(mlIntent.slug)) {
+      // set type
+      this.session.setType(mlIntent.slug);
+      return;
+    }
+    // if is not insurance type intent, have a look at given entities
+    response.results.nlp.entities.forEach( entity => {
+      console.log(entity);
+    });
   }
 
 }
