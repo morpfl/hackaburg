@@ -1,5 +1,5 @@
 export interface InformationResponse {
   id: number;
-  intent: string;
+  type: string;
   isFinished: boolean;
 }

@@ -17,15 +17,16 @@ export class InsuranceService {
   ) { }
 
   saveInformation(request: InformationRequest): Observable<InformationResponse> {
+    request.type = this.session.getType();
     return this.http.post<InformationResponse>(
       environment.apiBaseUrl + environment.apiInformation,
       request
     );
   }
 
-  getRecommendation(intent: string): Observable<unknown> {
+  getRecommendation(): Observable<unknown> {
     const qParams: HttpParams = new HttpParams();
-    qParams.append('intent', intent);
+    qParams.append('type', this.session.getType());
     qParams.append('id', this.session.getId());
     return this.http.get<unknown>(
       environment.apiBaseUrl + environment.apiRecommendation,

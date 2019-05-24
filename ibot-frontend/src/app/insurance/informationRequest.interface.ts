@@ -1,6 +1,6 @@
 export interface InformationRequest {
   id: number;
-  intent: string;
+  type?: string;
   key: string;
   value: string;
 }
