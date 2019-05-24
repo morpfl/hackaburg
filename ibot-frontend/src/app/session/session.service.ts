@@ -43,4 +43,8 @@ export class SessionService {
     this.cookieService.set('insuranceType', type, 1, '/');
   }
 
+  start(): void {
+    this.setId(Math.random().toString(36) + '-' + new Date().getTime().toString());
+  }
+
 }
