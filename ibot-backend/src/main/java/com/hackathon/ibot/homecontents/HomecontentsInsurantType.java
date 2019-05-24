@@ -1,6 +1,6 @@
 package com.hackathon.ibot.homecontents;
 
-public enum InsurantType {
+public enum HomecontentsInsurantType {
 	SINGLE,
 	FAMILY
 }

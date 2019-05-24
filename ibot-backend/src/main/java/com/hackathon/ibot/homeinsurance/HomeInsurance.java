@@ -18,4 +18,9 @@ public class HomeInsurance extends Insurance {
 	private int size;
 	@Getter @Setter
 	private InsuredAmount insuredAmount;
+	
+	public boolean hasNullField() {
+		if(houseType == null || age == 0 || size == 0 || insuredAmount == null) return true;
+		return false;
+	}
 }

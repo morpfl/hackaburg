@@ -11,8 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class HomeContents extends Insurance {
 	@Getter @Setter
-	private InsurantType insurantType;
+	private HomecontentsInsurantType homecontentsInsurantType;
 	
 	@Getter @Setter
-	private int living_pace_in_square_meters;
+	private int living_space_in_square_meters;
+	
+	public boolean hasNullField() {
+		if(homecontentsInsurantType == null || living_space_in_square_meters == 0) return true;
+		return false;
+	}
 }

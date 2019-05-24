@@ -22,4 +22,9 @@ public class CarInsurance extends Insurance {
 	
 	@Getter @Setter
 	private int kilometers_per_year;
+	
+	public boolean hasNullField() {
+		if(carType == null || areaType == null || kilometers_per_year == 0) return true;
+		return false;
+	}
 }
