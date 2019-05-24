@@ -1,0 +1,16 @@
+<div class="container">
+  <cdk-virtual-scroll-viewport class="virtual-viewport" [itemSize]="itemSize">
+    <div *cdkVirtualFor="let bubble of bubbleList">
+      <app-bubble [bubble]="bubble" [bubbleListSize]="bubbleList.length"></app-bubble>
+    </div>
+  </cdk-virtual-scroll-viewport>
+  <hr>
+</div>
+<div class="input-form">
+  <form (submit)="send($event)">
+    <mat-form-field>
+      <input type="text" matInput placeholder="Type a message..." id="msg" (keyup)="typing($event)" autocomplete="off">
+    </mat-form-field>
+    <button *ngIf="showBtn" type="submit" class="round-button"><div class="triangle"></div></button>
+  </form>
+</div>

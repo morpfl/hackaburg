@@ -4,18 +4,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { UiModule } from './ui/ui.module';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ChatComponent } from './chat/chat.component';
+import { BubbleComponent } from './bubble/bubble.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    ChatComponent,
+    BubbleComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    UiModule
+    UiModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

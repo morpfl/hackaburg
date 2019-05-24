@@ -1,0 +1,20 @@
+<div id="user">
+  <div *ngIf="bubble.isUser; else isBot" class="container">
+    <div class="talk-bubble tri-right left-in">
+      <div class="talktext">
+        <p>{{bubble.msg || bubbleText}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #isBot>
+  <div id="bot">
+    <div class="container">
+      <div class="talk-bubble tri-right right-in">
+        <div class="talktext">
+          <p>{{bubble.msg || bubbleText}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
