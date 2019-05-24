@@ -16,14 +16,14 @@ export const environment = {
     getkilometers_per_year: 'Car'
   },
   dataFields: [
-    'carType',
-    'areaType',
+    'cartype',
+    'areatype',
     'kilometers_per_year',
-    'liabilityType',
+    'liabilitytype',
     'insured_amount',
     'biketype',
-    'insurantType',
-    'houseType',
+    'insuranttype',
+    'housetype',
     'age',
     'size',
     'living_space_in_square_meters'
