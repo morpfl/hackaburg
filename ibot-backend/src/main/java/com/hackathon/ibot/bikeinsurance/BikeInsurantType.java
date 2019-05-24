@@ -1,6 +1,6 @@
 package com.hackathon.ibot.bikeinsurance;
 
-public enum PersonType {
+public enum BikeInsurantType {
 	STUDENT,
 	NON_STUDENT
 }

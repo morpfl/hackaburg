@@ -15,5 +15,10 @@ public class BikeInsurance extends Insurance {
 	private BikeType bikeType;
 	
 	@Getter @Setter
-	private PersonType personType;
+	private BikeInsurantType bikeInsurantType;
+	
+	public boolean hasNullField() {
+		if(bikeType == null || bikeInsurantType == null) return true;
+		return false;
+	}
 }

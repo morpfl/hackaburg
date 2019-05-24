@@ -14,5 +14,10 @@ public class LiabilityInsurance extends Insurance {
 	private LiabilityType liabilityType;
 	
 	@Getter @Setter
-	private InsuredAmount insuredAmount;
+	private LiabilityInsuredAmount liabilityInsuredAmount;
+	
+	public boolean hasNullField() {
+		if(liabilityType == null || liabilityInsuredAmount == null) return true;
+		return false;
+	}
 }
