@@ -36,6 +36,6 @@ export class ChatComponent implements OnInit {
   typing(e) {
     e.preventDefault();
     const msg = e.path[0].value;
-    this.showBtn = !validator.isEmpty(msg, {irgnore_whitespace: true});
+    this.showBtn = !validator.isEmpty(msg, {ignore_whitespace: true});
   }
 }
