@@ -1,18 +1,36 @@
 $blue: #8dcdfa;
 $grey: #e0e0e0;
 
+h1 {
+  text-align: center;
+  font-size: 3em;
+  font-weight: 200;
+}
 .container {
-  margin: 20px 200px;
+  padding: 20px;
+  margin: 0px auto 20px auto;
+  width: 60%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  @media only screen and (max-width: 1700px) {
+    width: 70%;
+  }
+  @media only screen and (max-width: 1550px) {
+    width: 80%;
+  }
+  @media only screen and (max-width: 1400px) {
+    width: 90%;
+  }
+  @media only screen and (max-width: 520px) {
+    border-width: 0;
+  }
 }
 .virtual-viewport {
   width: 100%;
   height: 70vh;
-  margin: auto;
-}
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
+  overflow-x: hidden; 
+  background-color: #fdfdfd;
 }
 
 hr {
@@ -42,11 +60,23 @@ hr {
   background-color: #3CB371;
 }
 .input-form {
-  margin-left: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 mat-form-field {
-  margin-left: 2.5rem;
-  width: 45%;
+  width: 30vw;
+  min-width: 300px;
+  @media only screen and (max-width: 1700px) {
+    width: 40vw;
+  }
+  @media only screen and (max-width: 1200px) {
+    width: 50vw;
+  }
+  @media only screen and (max-width: 800px) {
+    width: 60vw;
+  }
 }
 .triangle {
   margin-left: 4px;

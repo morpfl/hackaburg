@@ -1,25 +1,24 @@
 $blue: #8dcdfa;
 $grey: #e0e0e0;
 
-.date-user {
-  font-size: 10px;
-  margin-left: 430px;
-}
-.date-bot {
-  font-size: 10px;
-  float: right;
-  margin-right: 20px;
+.date {
+  background-color: #fff;
+  margin: 1em -1.5em -1.5em -1.5em;
+  font-size: 11px;
+  padding-right: 15px;
+  text-align: right;
 }
 
-#user .container {
+#bot .container {
   text-align: left;
 
   /* CSS talk bubble */
   .talk-bubble {
-    margin: 10px 0 10px 20px;
+    margin: 0px 0 10px 20px;
     display: inline-block;
     position: relative;
-    width: 450px;
+    width: 40%;
+    min-width: 300px;
     height: auto;
     background-color: $grey;
   }
@@ -57,21 +56,28 @@ $grey: #e0e0e0;
     left: -20px;
     right: auto;
     top: auto;
-    bottom: 15px;
+    bottom: 33px;
     border: 12px solid;
     border-color: $grey $grey transparent transparent;
   }
 }
 
-#bot .container {
+#user .container {
   text-align: right;
+  @media only screen and (max-width: 520px) {
+    text-align: center;
+  }
+  @media only screen and (max-width: 430px) {
+    text-align: left;
+  }
 
   /* CSS talk bubble */
   .talk-bubble {
-    margin: 10px 30px 10px 0;
+    margin: 0px 20px 10px 20px;
     display: inline-block;
     position: relative;
-    width: 450px;
+    width: 40%;
+    min-width: 300px;
     height: auto;
     background-color: $blue;
   }

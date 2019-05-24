@@ -12,30 +12,28 @@ export class ChatComponent implements OnInit {
   itemSize = 50;
   showBtn = false;
 
-  bubbleList = [
-    { isUser: true, msg: 'Hello Bot.efw feioaewf oiew ewoif ewiefp oefioew fiawe fnoiewf ew foiawef newaofneuwaipfn', date: new Date() },
-    { isUser: false, msg: 'Hello User.', date: new Date() },
-    { isUser: true, msg: 'Hello Bot.', date: new Date() },
-    { isUser: false, msg: 'Hello User.', date: new Date() },
-    { isUser: false, msg: 'Hello User.', date: new Date() },
-    { isUser: true, msg: 'Hello Bot.', date: new Date() },
-    { isUser: false, msg: 'Hello User.', date: new Date() },
-    { isUser: true, msg: 'Hello Bot.', date: new Date() },
-  ];
+  bubbleList = [];
 
   constructor(
-    private bot: BotService
-  ) { }
+    private botService: BotService
+  ) {
+    this.bubbleList.push({isUser: false, msg: 'Hello, my name is iBot. I\'m here to help you with your insurance. Let\'s get to knwo each other a little. :)', date: new Date()});
+  }
 
   ngOnInit() {
-    this.bot.initConversation();
+    this.botService.initConversation();
   }
+
   send(e): void {
     e.preventDefault();
     const msg = e.target.querySelector('#msg').value;
+    this.bubbleList.push({isUser: true, msg: msg, date: new Date()});
+    e.target.querySelector('#msg').value = '';
     if (!validator.isEmpty(msg, {irgnore_whitespace: true})) {
-      this.bot.sendMessage(msg).subscribe( resp => {
-        this.bot.processIntent(resp);
+      this.botService.sendMessage(msg).subscribe(res => {
+        if (res) {
+          this.bubbleList = this.bubbleList.concat(this.botService.getMessages(res));
+        }
       });
     }
   }
