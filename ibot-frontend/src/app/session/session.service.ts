@@ -43,8 +43,16 @@ export class SessionService {
     this.cookieService.set('insuranceType', type, 1, '/');
   }
 
+  softSetType(type: string): void {
+    if (!this.typeSet()) {
+      this.setType(type);
+    }
+  }
+
   start(): void {
-    this.setId(Math.random().toString(36) + '-' + new Date().getTime().toString());
+    if (!this.active()) {
+      this.setId(Math.random().toString(36) + '-' + new Date().getTime().toString());
+    }
   }
 
 }

@@ -27,7 +27,7 @@ export interface DMessage {
 export interface NLP {
   uuid:                string;
   intents:             Intent[];
-  entities:            object[];
+  entities:            any;
   language:            string;
   processing_language: string;
   version:             string;
