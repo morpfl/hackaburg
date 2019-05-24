@@ -43,42 +43,28 @@ public class ConversationService {
 	
 	public ConversationResponseDTO persistInformation(ConversationRequestDTO request) {
 		boolean alreadyFinished = false;
-		Conversation conversation;
-		Insurance insurance;
+		Conversation conversation = repository.findById(request.getId()).orElse(null);
 		
-		if(!idExists(request.getId())) {
-			conversation = new Conversation(request.getId());
-			insurance = mapTypeToInsurance(request.getType());
+		Insurance insurance = mapTypeToInsurance(request.getType());
+		this.insuranceRepository.save(insurance);
 			
-			this.repository.save(conversation);
-			this.insuranceRepository.save(insurance);
+		conversation.addInsurance(insurance);
+		this.repository.save(conversation);
 			
-			conversation.addInsurance(insurance);
-			this.repository.save(conversation);
+		System.out.println(this.repository.findById(request.getId()).orElse(null));
 			
-			System.out.println(this.repository.findById(request.getId()).orElse(null));
-		}
-		
-		else {
-			conversation = repository.findById(request.getId()).orElse(null);
-			insurance = mapTypeToInsurance(request.getType());		
-		}
-	
+		int index = conversation.getInsurances().indexOf(insurance);
+		System.out.println(index);
 			
-			int index = conversation.getInsurances().indexOf(insurance);
-			System.out.println(index);
+		if(insurance instanceof BikeInsurance) mapBikeProperty(conversation, (BikeInsurance) insurance, request.getKey(), request.getValue());
+		if(insurance instanceof CarInsurance) mapCarProperty(conversation, (CarInsurance) insurance, request.getKey(), request.getValue());
+		if(insurance instanceof HomeContents) mapHomecontentsProperty(conversation, (HomeContents) insurance, request.getKey(), request.getValue());
+		if(insurance instanceof HomeInsurance) mapHomeProperty(conversation, (HomeInsurance) insurance, request.getKey(), request.getValue());
+		if(insurance instanceof LiabilityInsurance) mapLiabilityProperty(conversation, (LiabilityInsurance) insurance, request.getKey(), request.getValue());
 			
-			if(insurance instanceof BikeInsurance) mapBikeProperty(conversation, (BikeInsurance) insurance, request.getKey(), request.getValue());
-			if(insurance instanceof CarInsurance) mapCarProperty(conversation, (CarInsurance) insurance, request.getKey(), request.getValue());
-			if(insurance instanceof HomeContents) mapHomecontentsProperty(conversation, (HomeContents) insurance, request.getKey(), request.getValue());
-			if(insurance instanceof HomeInsurance) mapHomeProperty(conversation, (HomeInsurance) insurance, request.getKey(), request.getValue());
-			if(insurance instanceof LiabilityInsurance) mapLiabilityProperty(conversation, (LiabilityInsurance) insurance, request.getKey(), request.getValue());
-			
-
-			
-			if(!hasNullField(request.getId(), insurance, index)) alreadyFinished = true;
-			ConversationResponseDTO response = buildResponse(request.getId(), alreadyFinished, request.getType());
-			return response;
+		if(!hasNullField(request.getId(), insurance, index)) alreadyFinished = true;
+		ConversationResponseDTO response = buildResponse(request.getId(), alreadyFinished, request.getType());
+		return response;
 	}
 
 	private boolean hasNullField(int id, Insurance insurance, int index) {
@@ -193,12 +179,19 @@ public class ConversationService {
 			return null;
 		}
 	}
-	
+
+	/*
 	public void testmethod() {
 		Conversation conversation = new Conversation(1);
 		this.repository.save(conversation);
 		System.out.println(this.repository.findById(1).orElse(null));
 		Insurance insurance = mapTypeToInsurance("Car");
 		this.insuranceRepository.save(insurance);
+	}
+*/
+	public int openConversation() {
+		Conversation conversation = new Conversation();
+		this.repository.save(conversation);
+		return conversation.getId(); 
 	}
 }
