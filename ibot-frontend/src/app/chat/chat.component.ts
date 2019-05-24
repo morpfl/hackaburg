@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import validator from 'validator';
+import { BotService } from '../bot/bot.service';
 
 @Component({
   selector: 'app-chat',
@@ -22,15 +23,20 @@ export class ChatComponent implements OnInit {
     { isUser: true, msg: 'Hello Bot.', date: new Date() },
   ];
 
-  constructor() { }
+  constructor(
+    private bot: BotService
+  ) { }
 
   ngOnInit() {
+    this.bot.initConversation();
   }
   send(e): void {
     e.preventDefault();
     const msg = e.target.querySelector('#msg').value;
     if (!validator.isEmpty(msg, {irgnore_whitespace: true})) {
-      //
+      this.bot.sendMessage(msg).subscribe( resp => {
+        this.bot.processIntent(resp);
+      });
     }
   }
   typing(e) {

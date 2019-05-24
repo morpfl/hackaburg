@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { DialogResponse, Intent } from './dialogResponse.interface';
 import { environment } from 'src/environments/environment';
 import { Message } from './message.interface';
+import { InsuranceService } from '../insurance/insurance.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class BotService {
 
   constructor(
     private http: HttpClient,
-    private session: SessionService
+    private session: SessionService,
+    private backend: InsuranceService
   ) { }
 
   initConversation(): void {
@@ -60,15 +62,43 @@ export class BotService {
         mlIntent = intent;
       }
     });
-    if (environment.insuranceTypes.includes(mlIntent.slug)) {
+    if (mlIntent === null || mlIntent === undefined || mlIntent.slug === null || mlIntent.slug === undefined) {
+      return;
+    }
+    if (environment.insuranceTypes[mlIntent.slug] !== null &&
+      environment.insuranceTypes[mlIntent.slug] !== undefined &&
+      environment.insuranceTypes[mlIntent.slug].length > 0) {
       // set type
-      this.session.setType(mlIntent.slug);
+      this.session.setType(environment.insuranceTypes[mlIntent.slug]);
+    }
+    if (response.results === null || response.results.nlp === null || response.results.nlp.entities === null) {
       return;
     }
     // if is not insurance type intent, have a look at given entities
-    response.results.nlp.entities.forEach( entity => {
-      console.log(entity);
-    });
+    for (const key in response.results.nlp.entities) {
+      if (response.results.nlp.entities.hasOwnProperty(key)) {
+        if (environment.dataFields.includes(key)) {
+          const entitySet = response.results.nlp.entities[key];
+          let mlEntity: any = null;
+          entitySet.forEach( e1 => {
+            if (mlEntity === null || e1.confidence > mlEntity.confidence) {
+              mlEntity = e1;
+            }
+          });
+          this.backend.saveInformation({
+            key: key,
+            value: mlEntity.data
+          }).subscribe( resp => {
+            if (resp.isFinished) {
+              // FINISHED !!!
+              this.backend.getRecommendation().subscribe( recommendation => {
+                console.log(recommendation);
+              });
+            }
+          });
+        }
+      }
+    }
   }
 
 }

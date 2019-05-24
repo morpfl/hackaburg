@@ -17,7 +17,9 @@ export class InsuranceService {
   ) { }
 
   saveInformation(request: InformationRequest): Observable<InformationResponse> {
+    console.log(request);
     request.type = this.session.getType();
+    request.id = this.session.getId();
     return this.http.post<InformationResponse>(
       environment.apiBaseUrl + environment.apiInformation,
       request
