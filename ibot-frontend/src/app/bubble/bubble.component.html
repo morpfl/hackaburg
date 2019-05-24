@@ -1,18 +1,20 @@
-<div id="user">
-  <div *ngIf="bubble.isUser; else isBot" class="container">
+<div id="bot">
+  <div *ngIf="!bubble.isUser; else isUser" class="container">
     <div class="talk-bubble tri-right left-in">
       <div class="talktext">
         <p>{{bubble.msg || bubbleText}}</p>
+        <div class="date">{{ bubble.date | time }}</div>
       </div>
     </div>
   </div>
 </div>
-<ng-template #isBot>
-  <div id="bot">
+<ng-template #isUser>
+  <div id="user">
     <div class="container">
       <div class="talk-bubble tri-right right-in">
         <div class="talktext">
           <p>{{bubble.msg || bubbleText}}</p>
+          <div class="date">{{ bubble.date | time }}</div>
         </div>
       </div>
     </div>
