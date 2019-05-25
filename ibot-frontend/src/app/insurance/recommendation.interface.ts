@@ -1,14 +1,15 @@
 export interface Recommendation {
   name: string;
   premium: number;
-  liabilitytype?: string;
-  money?: string;
-  biketype?: string;
-  insuranttype?: string;
-  cartype?: string;
-  areatype?: string;
+  liabilityType?: string;
+  insured_amount?: string;
+  bikeType?: string;
+  insurantType?: string;
+  carType?: string;
+  areaType?: string;
   kilometers_per_year?: string;
-  number?: string;
-  housetype?: string;
+  houseType?: string;
+  age?: string;
   size?: string;
+  living_space_in_sqaure_meters?: string; 
 }
