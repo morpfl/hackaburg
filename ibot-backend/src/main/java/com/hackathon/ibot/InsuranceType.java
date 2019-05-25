@@ -1,9 +1,9 @@
 package com.hackathon.ibot;
 
 public enum InsuranceType {
-CAR,
-BIKE,
-HOUSE,
-HOMECONTENTS,
-LIABILITY
+Car,
+Bike,
+Home,
+Homecontents,
+Liability
 }

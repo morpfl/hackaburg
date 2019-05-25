@@ -14,14 +14,14 @@ public class ConversationController {
 	@Autowired
 	private ConversationService service;
 	
-	@CrossOrigin("http://localhost:4200")
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/api/information")
 	public ResponseEntity<ConversationResponseDTO> receiveNewInformation(@RequestBody ConversationRequestDTO requestDTO){
 		ConversationResponseDTO response = this.service.persistInformation(requestDTO);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
-	@CrossOrigin("http://localhost:4200")
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/api/start")
 	public ResponseEntity<Integer> startNewConversation(){
 		return ResponseEntity.status(HttpStatus.OK).body(this.service.openConversation());
