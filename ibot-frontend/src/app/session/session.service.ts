@@ -62,6 +62,12 @@ export class SessionService {
     }
   }
 
+  restart() {
+    this.getNewId().subscribe( id => {
+      this.setId(id.toString());
+    });
+  }
+
   getNewId(): Observable<number> {
     const httpOptions = {
       headers: new HttpHeaders({

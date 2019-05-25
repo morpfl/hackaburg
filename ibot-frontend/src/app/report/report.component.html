@@ -1,9 +1,15 @@
 <div class="container">
-  <h1>Reports</h1>
+    <button mat-stroked-button color="primary" class="reset" (click)="reset()">Back to chat</button>
+  <h1>Your result!</h1>
   <hr />
-  <div class="typewriter">
+  <div *ngIf="!showResult; else hideCurser" class="typewriter">
     <h2>I've got an isurance that fits on you!</h2>
   </div>
+  <ng-template #hideCurser>
+      <div class="typewriter2">
+          <h2>I've got an isurance that fits on you!</h2>
+      </div>
+  </ng-template>
 </div>
 <div *ngIf="showResult" class="result">
   <div class="result-text">{{results[0].name}}</div>
@@ -12,25 +18,23 @@
   <div class="info">
     <div class="list-type1">
       <ol class="fade">
-        <span *ngIf><li *ngFor="let result of resultList" class="fade"><span>Formget Online Form Builder Create Online Forms</span></li></span>
+        <li *ngFor="let result of resultList[0]" class="fade"><span>{{result}}</span></li>
       </ol>
     </div>
     <br />
   </div>
+  <ng-container *ngIf="results.length > 1">
   <hr *ngIf="showElements.length > 1" class="fade-hr" />
   <h2 *ngIf="showElements.length > 2" class="table fade">Alternative</h2>
-  <div class="container-table">
-    <ul class="responsive-table">
-      <li *ngIf="showElements.length > 3" class="table-header fade">
-        <div class="col col-4">Insurance</div>
-        <div class="col col-4">Conditions</div>
-        <div class="col col-4">Saving</div>
-      </li>
-      <li *ngIf="showElements.length > 4" class="table-row fade">
-        <div class="col col-4">--Name--</div>
-        <div class="col col-4">--Conditions--</div>
-        <div class="col col-4">--Saving--</div>
-      </li>
-    </ul>
-  </div>
+  <div class="result-text">{{results[1].name}}</div>
+  <div class="dollar fade"><b>{{results[1].premium}}€ premium</b></div>
+  <div *ngIf="showElements.length > 3" class="info">
+      <div class="list-type2">
+        <ol class="fade">
+          <li *ngFor="let result of resultList[1]" class="fade"><span>{{result}}</span></li>
+        </ol>
+      </div>
+      <br />
+    </div>
+  </ng-container>
 </div>

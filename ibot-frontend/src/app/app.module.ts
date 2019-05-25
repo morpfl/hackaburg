@@ -24,7 +24,10 @@ import { ReportComponent } from './report/report.component';
     UiModule,
     HttpClientModule
   ],
-  providers: [CookieService],
+  providers: [
+    CookieService,
+    AppComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
