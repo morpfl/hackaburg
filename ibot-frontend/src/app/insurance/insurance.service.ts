@@ -28,7 +28,6 @@ export class InsuranceService {
   }
 
   getRecommendation(): Observable<Recommendation[]> {
-    const qParams: HttpParams = new HttpParams();
     return this.http.get<Recommendation[]>(
       environment.apiBaseUrl + environment.apiRecommendation + '/' + this.session.getId() + '/' + this.session.getType()
     );
