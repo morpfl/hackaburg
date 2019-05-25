@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Recommendation } from '../insurance/recommendation.interface';
 import { SessionService } from '../session/session.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-report',
@@ -9,7 +10,7 @@ import { SessionService } from '../session/session.service';
 })
 export class ReportComponent implements OnInit, OnChanges {
 
-  @Input() results: Recommendation;
+  @Input() results: Recommendation[];
 
   showResult = false;
   insurance = 'The student insurance'
@@ -18,7 +19,8 @@ export class ReportComponent implements OnInit, OnChanges {
   type: string;
 
   constructor(
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private appComp: AppComponent
   ) { }
 
   ngOnInit() {
@@ -34,19 +36,24 @@ export class ReportComponent implements OnInit, OnChanges {
               this.showElements.push(1);
               setTimeout(() => {
                 this.showElements.push(1);
-              }, 300);
-            }, 300);
-          }, 300);
-        }, 100);
-      }, 100);
+                setTimeout(() => {
+                  this.showElements.push(1);
+                }, 200);
+              }, 200);
+            }, 200);
+          }, 200);
+        }, 200);
+      }, 200);
     }, 3000);
+    //get type of inscurance
     this.type = this.sessionService.getType();
   }
 
   ngOnChanges() {
     if (this.results) {
+      this.resultList = [[], []];
       let e: string;
-      for (let i = 0; i < 1; i++) {
+      for (let i = 0; i <= Math.min(1, this.results.length); i++) {
         if (this.type === 'Car') {
           e = this.results[i].carType;
           if (e !== undefined && e !== null) {
@@ -107,5 +114,10 @@ export class ReportComponent implements OnInit, OnChanges {
         }
       }
     }
+  }
+
+  reset(): void {
+    this.appComp.showResults = false;
+    this.appComp.clearChat();
   }
 }

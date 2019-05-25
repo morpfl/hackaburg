@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import validator from 'validator';
 import { BotService } from '../bot/bot.service';
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',

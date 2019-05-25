@@ -15,17 +15,23 @@ hr {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.typewriter {
+.typewriter,
+.typewriter2 {
   margin-top: 50px;
 }
-.typewriter h2 {
+.typewriter h2,
+.typewriter2 h2 {
   width: 100%;
   font-size: 40px;
   overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: 0.15em solid #080808; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
   letter-spacing: 0.15em; /* Adjust as needed */
+}
+
+.typewriter h2 {
+  border-right: 0.15em solid #8dcdfa; /* The typwriter cursor */
+
   animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
   @media only screen and (max-width: 1050px) {
     font-size: 30px;
@@ -311,13 +317,15 @@ h2.table {
   animation: fadein 2s;
 }
 
-.list-type1 {
+.list-type1,
+.list-type2 {
   cursor: default;
   width: 400px;
   margin: 0 auto;
 }
 
-.list-type1 ol {
+.list-type1 ol,
+.list-type2 ol {
   counter-reset: li;
   list-style: none;
   *list-style: decimal;
@@ -325,18 +333,19 @@ h2.table {
   font-family: "Raleway", sans-serif;
   padding: 0;
 }
-.list-type1 ol ol {
+.list-type1 ol ol,
+.list-type2 ol ol {
   margin: 0 0 0 2em;
 }
 
-.list-type1 span {
+.list-type1 span,
+.list-type2 span {
   min-width: 50px;
   position: relative;
   display: block;
   padding: 0.4em 0.4em 0.4em 2em;
   *padding: 0.4em;
   margin: 0.5em 0;
-  background: #93c775;
   color: #000;
   text-decoration: none;
   -moz-border-radius: 0.3em;
@@ -345,14 +354,27 @@ h2.table {
   transition: all 0.2s ease-in-out;
 }
 
+.list-type1 span {
+  background: #93c775;
+}
 .list-type1 span:before {
+  background: #93c775;
+}
+.list-type2 span {
+  background: var(--blue);
+}
+.list-type2 span:before {
+  background: var(--blue);
+}
+
+.list-type1 span:before,
+.list-type2 span:before {
   content: counter(li);
   counter-increment: li;
   position: absolute;
   left: -1.3em;
   top: 50%;
   margin-top: -1.3em;
-  background: #93c775;
   height: 2em;
   width: 2em;
   line-height: 2em;
@@ -365,10 +387,6 @@ h2.table {
   color: #fff;
 }
 .dollar {
-    font-size: 45px;
-    color: #d4af37;
+  font-size: 45px;
+  color: #d4af37;
 }
-
-
-
-
