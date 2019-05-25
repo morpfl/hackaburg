@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { isNumber, isString } from 'util';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,11 +8,14 @@ import { DialogResponse, Intent } from './dialogResponse.interface';
 import { environment } from 'src/environments/environment';
 import { Message } from './message.interface';
 import { InsuranceService } from '../insurance/insurance.service';
+import { Recommendation } from '../insurance/recommendation.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BotService {
+
+  results = new EventEmitter<Recommendation[]>();
 
   constructor(
     private http: HttpClient,
@@ -63,10 +66,8 @@ export class BotService {
         mlIntent = intent;
       }
     });
-    if (mlIntent === null || mlIntent === undefined || mlIntent.slug === null || mlIntent.slug === undefined) {
-      return;
-    }
-    if (environment.insuranceTypes[mlIntent.slug] !== null &&
+    if (!(mlIntent === null || mlIntent === undefined || mlIntent.slug === null || mlIntent.slug === undefined) &&
+      environment.insuranceTypes[mlIntent.slug] !== null &&
       environment.insuranceTypes[mlIntent.slug] !== undefined &&
       environment.insuranceTypes[mlIntent.slug].length > 0) {
       // set type
@@ -76,8 +77,10 @@ export class BotService {
       return;
     }
     // have a look at given entities
-    for (const key in response.results.nlp.entities) {
+    console.log(response.results.nlp.entities);
+    for (let key in response.results.nlp.entities) {
       if (response.results.nlp.entities.hasOwnProperty(key)) {
+        // entity is relevant
         if (environment.dataFields.includes(key)) {
           const entitySet = response.results.nlp.entities[key];
           let mlEntity: any = null;
@@ -86,17 +89,62 @@ export class BotService {
               mlEntity = e1;
             }
           });
+          if (key === 'money') {
+            mlEntity.data = mlEntity.amount;
+          }
           this.backend.saveInformation({
             key: key,
             value: mlEntity.data
           }).subscribe( resp => {
             if (resp.isFinished) {
               // FINISHED !!!
-              this.backend.getRecommendation().subscribe( recommendation => {
-                console.log(recommendation);
+              this.backend.getRecommendation().subscribe( recommendations => {
+                console.log(recommendations);
+                this.results.emit(recommendations);
               });
             }
           });
+        } else {
+          // check if relevant entity is hidden
+          const entitySet = response.results.nlp.entities[key];
+          let mlEntity: any = null;
+          entitySet.forEach( e1 => {
+            if (mlEntity === null || e1.confidence > mlEntity.confidence) {
+              mlEntity = e1;
+            }
+          });
+          // LIABILITY -> MONEY
+          if (this.session.getType() === 'Liability') {
+            if (mlEntity.scalar !== null && mlEntity.scalar !== undefined) {
+              key = 'money';
+              mlEntity.data = mlEntity.scalar;
+            } else if (mlEntity.amount !== null && mlEntity.amount !== undefined) {
+              key = 'money';
+              mlEntity.data = mlEntity.amount;
+            }
+          }
+          // CAR -> KILOMETERS_PER_YEAR
+          if (this.session.getType() === 'Car') {
+            if (mlEntity.meters !== null && mlEntity.meters !== undefined) {
+              key = 'kilometers_per_year';
+              mlEntity.data = mlEntity.meters / 1000.0;
+            }
+          }
+          // check again if new useful entity has been found
+          if (environment.dataFields.includes(key)) {
+            this.backend.saveInformation({
+              key: key,
+              value: mlEntity.data
+            }).subscribe( resp => {
+              if (resp.isFinished) {
+                // FINISHED !!!
+                this.backend.getRecommendation().subscribe( recommendations => {
+                  console.log(recommendations);
+                  this.results.emit(recommendations);
+                });
+              }
+            });
+          }
         }
       }
     }

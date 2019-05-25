@@ -5,6 +5,7 @@ import { InformationResponse } from './informationResponse.interface';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SessionService } from '../session/session.service';
+import { Recommendation } from './recommendation.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +27,9 @@ export class InsuranceService {
     );
   }
 
-  getRecommendation(): Observable<unknown> {
-    const qParams: HttpParams = new HttpParams();
-    qParams.append('type', this.session.getType());
-    qParams.append('id', this.session.getId());
-    return this.http.get<unknown>(
-      environment.apiBaseUrl + environment.apiRecommendation,
-      { params: qParams }
+  getRecommendation(): Observable<Recommendation[]> {
+    return this.http.get<Recommendation[]>(
+      environment.apiBaseUrl + environment.apiRecommendation + '/' + this.session.getId() + '/' + this.session.getType()
     );
   }
 
