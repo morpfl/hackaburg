@@ -49,7 +49,8 @@ export class BotService {
       messages.push({
         isUser: false,
         msg: message.content,
-        date: new Date()
+        date: new Date(),
+        isGif: message.content.substr(message.content.lastIndexOf('.') + 1).toLowerCase() === 'gif'
       });
     });
     return messages;
