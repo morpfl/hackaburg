@@ -50,6 +50,7 @@ export class ReportComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.type = 'Bike';
     if (this.results) {
       this.resultList = [[], []];
       let e: string;

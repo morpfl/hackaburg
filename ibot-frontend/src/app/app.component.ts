@@ -9,7 +9,7 @@ import { SessionService } from './session/session.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  
+
   showResults = false;
   results: Recommendation[];
 
@@ -22,26 +22,9 @@ export class AppComponent implements OnInit {
     this.botService.results.subscribe(res => {
       if (res) {
         this.results = res;
-        this.showResults = true; 
+        this.showResults = true;
       }
     });
-    // TEST DATA ONLY
-    this.sessionService.setType('Liability');
-    this.botService.results.emit([
-      {
-        name: 'Versicherungsversicherung',
-        premium: 200,
-        liabilityType: 'FAMILY',
-        insured_amount: 'TEN_MIO'
-      },
-      {
-        name: 'Total insurance Ltd.',
-        premium: 40,
-        liabilityType: 'SINGLE',
-        insured_amount: 'FIVE_MIO'
-      }
-    ])
-    // TEST DATA ONLY
   }
 
   clearChat() {
