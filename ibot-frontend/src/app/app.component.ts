@@ -22,7 +22,9 @@ export class AppComponent implements OnInit {
     this.botService.results.subscribe(res => {
       if (res) {
         this.results = res;
-        this.showResults = true;
+        setTimeout(() => {
+          this.showResults = true;
+        }, 1800);
       }
     });
   }
