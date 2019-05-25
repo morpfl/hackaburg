@@ -16,6 +16,6 @@ public class FinalBikeInsurance {
 	@Getter @Setter
 	private BikeInsurance insurance;
 	@Getter @Setter
-	private Float premium;
+	private Double premium;
  
 }

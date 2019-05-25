@@ -1,5 +1,6 @@
 package com.hackathon.ibot;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 
@@ -35,7 +36,7 @@ public class ConversationController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/api/recommendation/{id}/{type}")
-	public ResponseEntity<List<FinalInsuranceResponseDTO>> recommendInsurance(@PathVariable("id") int id, @PathVariable("type") String type){
+	public ResponseEntity<List<FinalInsuranceResponseDTO>> recommendInsurance(@PathVariable("id") int id, @PathVariable("type") String type) throws FileNotFoundException{
 		List<FinalInsuranceResponseDTO> recommendationList = this.service.calculateRecs(id, type);
 		return ResponseEntity.status(HttpStatus.OK).body(recommendationList);
 	}

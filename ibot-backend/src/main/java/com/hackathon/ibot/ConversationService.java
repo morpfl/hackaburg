@@ -22,7 +22,12 @@ import com.hackathon.ibot.liability.LiabilityType;
 import com.hackathon.ibot.liability.LiabilityInsuredAmount;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -226,9 +231,25 @@ public class ConversationService implements Comparator<FinalBikeInsurance>{
 		return conversation.getId(); 
 	}
 
-	public List<FinalInsuranceResponseDTO> calculateRecs(int id, String type) {
+	public List<FinalInsuranceResponseDTO> calculateRecs(int id, String type) throws FileNotFoundException {
 		
-		JSONParser parser = new JSONParser();
+		 InputStream fis = new FileInputStream("dreamservice_bikeinsurance.json");
+	     JsonReader reader = Json.createReader(fis);
+	     JsonObject dreamService_bikeInsurance = reader.readObject();
+	     reader.close();
+	     
+	     InputStream fis2 = new FileInputStream("metropolica_bikeinsurance.json");
+	     JsonReader reader2 = Json.createReader(fis2);
+	     JsonObject metroplica_bikeInsurance = reader2.readObject();
+	     reader2.close();
+	     
+	     InputStream fis3 = new FileInputStream("utopia_bikeinsurance.json");
+	     JsonReader reader3 = Json.createReader(fis3);
+	     JsonObject utopia_bikeInsurance = reader3.readObject();
+	     reader3.close();
+	     
+	     
+	        
 		List<FinalBikeInsurance> bestInsurances = new LinkedList<FinalBikeInsurance>();
 		
 		Insurance insurance = this.insuranceRepository.findInsuranceByIdAndType(id, InsuranceType.valueOf(type));
@@ -237,57 +258,54 @@ public class ConversationService implements Comparator<FinalBikeInsurance>{
 
 			try {
 				
-				Object dreamService_bikeInsurance = parser.parse(new FileReader("/home/moritz/Downloads/TELIS_digital_insurance_track_data/bikeinsurance/dreamservice_bikeinsurance.json"));
 				System.out.println("json object: " + dreamService_bikeInsurance);
-				Object metropolica_bikeInsurance = parser.parse(new FileReader("metropolica_bikeinsurance.json"));
-				Object utopia_bikeInsurance = parser.parse(new FileReader("utopia_bikeinsurance.json"));
-				
-				JsonObject jsonObject = (JsonObject) dreamService_bikeInsurance;
-				JsonArray jsonArray= (JsonArray) jsonObject.getJsonArray("insurances");
+				JsonArray jsonArray= dreamService_bikeInsurance.getJsonArray("insurances");
             
-				for(int i = 0; i < 8; i++) {
-					String bikeType = jsonArray.getJsonObject(i).getString("bike type");
-					System.out.println(bikeType);
+				for(int i = 0; i < jsonArray.size(); i++) {
+					System.out.println("Loop 1");
+					String bikeType = jsonArray.getJsonObject(i).getString("type");
 					String insurantType = jsonArray.getJsonObject(i).getString("student");
-					System.out.println(insurantType);
-					float premium = Float.parseFloat(jsonArray.getJsonObject(i).getString("premium_per_month"));
+					double premium = jsonArray.getJsonObject(i).getJsonNumber("premium_per_month").doubleValue();
 					if ((binsurance.getBikeType().name() == bikeType)&&(binsurance.getBikeInsurantType().name() == insurantType)) {
 						FinalBikeInsurance finalBikeInsurance = new FinalBikeInsurance("DreamService", binsurance, premium);
+						System.out.println("final:" + finalBikeInsurance);
 						bestInsurances.add(finalBikeInsurance);
 					}
 				}
 				
-				jsonObject = (JsonObject) metropolica_bikeInsurance;
-				jsonArray = (JsonArray) jsonObject.getJsonArray("insurances");
-				
-				for(int i = 0; i < 8; i++) {
-					String bikeType = jsonArray.getJsonObject(i).getString("bike type");
+				jsonArray = metroplica_bikeInsurance.getJsonArray("insurances");
+			
+				for(int i = 0; i < jsonArray.size(); i++) {
+					System.out.println("Loop 2");
+					String bikeType = jsonArray.getJsonObject(i).getString("type");
 					String insurantType = jsonArray.getJsonObject(i).getString("student");
-					float premium = Float.parseFloat(jsonArray.getJsonObject(i).getString("premium_per_month"));
+					double premium = jsonArray.getJsonObject(i).getJsonNumber("premium_per_month").doubleValue();
 					if ((binsurance.getBikeType().name() == bikeType)&&(binsurance.getBikeInsurantType().name() == insurantType)) {
 						FinalBikeInsurance finalBikeInsurance = new FinalBikeInsurance("Metropolica", binsurance, premium);
+						System.out.println("final:" + finalBikeInsurance);
 						bestInsurances.add(finalBikeInsurance);
 					}
 				}
+			
+				jsonArray = utopia_bikeInsurance.getJsonArray("insurances");
 				
-				jsonObject = (JsonObject) utopia_bikeInsurance;
-				jsonArray = (JsonArray) jsonObject.getJsonArray("insurances");
-				
-				for(int i = 0; i < 8; i++) {
-					String bikeType = jsonArray.getJsonObject(i).getString("bike type");
+				for(int i = 0; i < jsonArray.size(); i++) {
+					System.out.println("Loop 3");
+					String bikeType = jsonArray.getJsonObject(i).getString("type");
 					System.out.println(bikeType);
 					String insurantType = jsonArray.getJsonObject(i).getString("student");
 					System.out.println(insurantType);
-					float premium = Float.parseFloat(jsonArray.getJsonObject(i).getString("premium_per_month"));
+					double premium = jsonArray.getJsonObject(i).getJsonNumber("premium_per_month").doubleValue();
 					if ((binsurance.getBikeType().name() == bikeType)&&(binsurance.getBikeInsurantType().name() == insurantType)) {
 						FinalBikeInsurance finalBikeInsurance = new FinalBikeInsurance("Utopia", binsurance, premium);
+						System.out.println("final:" + finalBikeInsurance);
 						bestInsurances.add(finalBikeInsurance);
 					}
 				}
 			}
 			catch(Exception e) {
-				System.out.println("Error!!!!!!!!11");
-			}
+				
+				 e.printStackTrace();			}
 		}
 		
 		Collections.sort(bestInsurances, new Comparator<FinalBikeInsurance>() {
@@ -299,11 +317,11 @@ public class ConversationService implements Comparator<FinalBikeInsurance>{
 			
 		List<FinalInsuranceResponseDTO> finalInsurances = new LinkedList<FinalInsuranceResponseDTO>();
 		
-		//FinalInsuranceResponseDTO finalInsurance1 = new FinalInsuranceResponseDTO(bestInsurances.get(0).getName(),finalInsurances.get(0).getInsurance(),finalInsurances.get(0).getPremium());
-		//FinalInsuranceResponseDTO finalInsurance2 = new FinalInsuranceResponseDTO(bestInsurances.get(1).getName(),finalInsurances.get(1).getInsurance(),finalInsurances.get(1).getPremium());
+		FinalInsuranceResponseDTO finalInsurance1 = new FinalInsuranceResponseDTO(bestInsurances.get(0).getName(),finalInsurances.get(0).getInsurance(),finalInsurances.get(0).getPremium());
+		FinalInsuranceResponseDTO finalInsurance2 = new FinalInsuranceResponseDTO(bestInsurances.get(1).getName(),finalInsurances.get(1).getInsurance(),finalInsurances.get(1).getPremium());
 	
-		//finalInsurances.add(finalInsurance1);
-		//finalInsurances.add(finalInsurance2);
+		finalInsurances.add(finalInsurance1);
+		finalInsurances.add(finalInsurance2);
 		
 		return null;
 	}
