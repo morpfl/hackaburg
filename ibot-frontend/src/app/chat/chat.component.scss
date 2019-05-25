@@ -4,7 +4,6 @@ $grey: #e0e0e0;
 h1 {
   text-align: center;
   font-size: 3em;
-  font-weight: 200;
 }
 .container {
   display: flex;
@@ -33,7 +32,7 @@ h1 {
 .virtual-viewport {
   width: 100%;
   height: 70vh;
-  overflow-x: hidden; 
+  overflow-x: hidden;
   background-color: #fdfdfd;
 }
 
@@ -60,9 +59,9 @@ hr {
   font-size: 20px;
   font-weight: bold;
   transition: 0.2s;
-  }
+}
 .round-button:hover {
-  background-color: #3CB371;
+  background-color: #3cb371;
 }
 .input-form {
   display: flex;
@@ -85,7 +84,7 @@ mat-form-field {
 }
 .triangle {
   margin-left: 4px;
-  border-right: 3px solid; 
+  border-right: 3px solid;
   border-bottom: 3px solid;
   height: 15px;
   width: 15px;

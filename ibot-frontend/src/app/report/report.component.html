@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>Reports</h1>
+  <hr />
+  <div class="typewriter">
+    <h2>I've got an isurance that fits on you!</h2>
+  </div>
+</div>
+<div *ngIf="showLoader" class="sk-folding-cube">
+  <div class="sk-cube1 sk-cube"></div>
+  <div class="sk-cube2 sk-cube"></div>
+  <div class="sk-cube4 sk-cube"></div>
+  <div class="sk-cube3 sk-cube"></div>
+</div>
+<div *ngIf="showResult" class="result">
+  <h1 class="result-text">{{insurance}}</h1>
+</div>
