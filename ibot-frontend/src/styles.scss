@@ -1,4 +1,15 @@
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+:root {
+  --blue: #8dcdfa;
+  --grey: #e0e0e0;
+}
+
 html, body {
   margin: 0;
+}
+* {
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 300 !important;
 }

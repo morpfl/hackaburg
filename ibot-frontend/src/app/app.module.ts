@@ -8,13 +8,15 @@ import { BubbleComponent } from './bubble/bubble.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { TimePipe } from './time.pipe';
+import { ReportComponent } from './report/report.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
     BubbleComponent,
-    TimePipe
+    TimePipe,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +24,10 @@ import { TimePipe } from './time.pipe';
     UiModule,
     HttpClientModule
   ],
-  providers: [CookieService],
+  providers: [
+    CookieService,
+    AppComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

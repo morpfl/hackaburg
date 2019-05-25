@@ -1,1 +1,2 @@
-<app-chat></app-chat>
+<app-chat *ngIf="!showResults; else showResult"></app-chat>
+<ng-template #showResult><app-report [results]="results"></app-report></ng-template>

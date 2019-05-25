@@ -1,0 +1,42 @@
+<div class="container">
+    <button mat-stroked-button color="primary" class="reset" (click)="reset()">Back to chat</button>
+  <h1>Your result!</h1>
+  <hr />
+  <div *ngIf="!showResult; else hideCurser" class="typewriter">
+    <h2>I've got an isurance that fits on you!</h2>
+  </div>
+  <ng-template #hideCurser>
+      <div class="typewriter2">
+          <h2>I've got an isurance that fits on you!</h2>
+      </div>
+  </ng-template>
+</div>
+<div *ngIf="showResult" class="result">
+  <div class="result-text">{{results[0].name}}</div>
+  <div class="dollar fade"><b>{{results[0].premium}}€ premium</b></div>
+  <br />
+  <div class="info">
+    <div class="list-type1">
+      <ol class="fade">
+        <li *ngFor="let result of resultList[0]" class="fade"><span>{{result}}</span></li>
+      </ol>
+    </div>
+    <br />
+  </div>
+  <ng-container *ngIf="results.length > 1">
+  <hr *ngIf="showElements.length > 2" class="fade-hr" />
+  <h2 *ngIf="showElements.length > 3" class="table fade">Alternative</h2>
+  <div *ngIf="showElements.length > 4" >
+  <div class="result-text" style="font-size: 35px;">{{results[1].name}}</div>
+  <div class="dollar fade" style="font-size: 35px"><b>{{results[1].premium}}€ premium</b></div>
+  </div>
+  <div *ngIf="showElements.length > 5" class="info">
+      <div class="list-type2">
+        <ol class="fade">
+          <li *ngFor="let result of resultList[1]" class="fade"><span>{{result}}</span></li>
+        </ol>
+      </div>
+      <br />
+    </div>
+  </ng-container>
+</div>

@@ -5,7 +5,7 @@ import { BotService } from '../bot/bot.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
 
@@ -16,7 +16,7 @@ export class ChatComponent implements OnInit {
   bubbleList = [];
 
   constructor(
-    private botService: BotService
+    private botService: BotService,
   ) {
     this.bubbleList.push({ isUser: false, msg: 'Hello, my name is iBot. I\'m here to help you with your insurance. Let\'s get to knwo each other a little. :)', date: new Date() });
   }
