@@ -75,7 +75,7 @@ export class BotService {
     if (response.results === null || response.results.nlp === null || response.results.nlp.entities === null) {
       return;
     }
-    // if is not insurance type intent, have a look at given entities
+    // have a look at given entities
     for (const key in response.results.nlp.entities) {
       if (response.results.nlp.entities.hasOwnProperty(key)) {
         if (environment.dataFields.includes(key)) {
