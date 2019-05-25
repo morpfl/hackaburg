@@ -2,7 +2,8 @@
   <div *ngIf="!bubble.isUser; else isUser" class="container">
     <div class="talk-bubble tri-right left-in">
       <div class="talktext">
-        <p>{{bubble.msg || bubbleText}}</p>
+        <p *ngIf="!bubble.isGif; else isGif">{{bubble.msg || bubbleText}}</p>
+        <ng-template #isGif><img [src]="bubble.msg" class="gif"></ng-template>
         <div class="date">{{ bubble.date | time }}</div>
       </div>
     </div>

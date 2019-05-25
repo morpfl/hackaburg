@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
-import { CdkVirtualScrollViewport, ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
+import { Component, OnInit, Input, AfterViewInit, OnChanges } from '@angular/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-bubble',
   templateUrl: './bubble.component.html',
   styleUrls: ['./bubble.component.scss']
 })
-export class BubbleComponent implements OnInit, AfterViewInit {
+export class BubbleComponent implements OnInit, OnChanges {
 
   @Input() bubble: any;
   @Input() bubbleListSize: number;
-  bubbleText = '...';
+  bubbleText = 'Failed to load message...';
 
   constructor(private cdk: CdkVirtualScrollViewport) {
   }
@@ -18,8 +18,7 @@ export class BubbleComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
-    this.cdk.scrollToIndex(this.bubbleListSize - 1);
+  ngOnChanges() {
+    this.cdk.scrollTo({bottom: 0});
   }
-
 }
