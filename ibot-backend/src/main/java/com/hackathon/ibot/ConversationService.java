@@ -2,6 +2,7 @@ package com.hackathon.ibot;
 
 import java.util.List;
 
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,18 @@ import com.hackathon.ibot.liability.LiabilityInsurance;
 import com.hackathon.ibot.liability.LiabilityType;
 import com.hackathon.ibot.liability.LiabilityInsuredAmount;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import javax.json.*;
+
 @Service
-public class ConversationService {
+public class ConversationService implements Comparator<FinalBikeInsurance>{
 	
 	private ConversationRepository repository;
 	
@@ -214,4 +225,97 @@ public class ConversationService {
 		this.repository.save(conversation);
 		return conversation.getId(); 
 	}
+
+	public List<FinalInsuranceResponseDTO> calculateRecs(int id, String type) {
+		
+		JSONParser parser = new JSONParser();
+		List<FinalBikeInsurance> bestInsurances = new LinkedList<FinalBikeInsurance>();
+		
+		Insurance insurance = this.insuranceRepository.findInsuranceByIdAndType(id, InsuranceType.valueOf(type));
+		if(insurance instanceof BikeInsurance) {
+			BikeInsurance binsurance = (BikeInsurance) insurance;
+
+			try {
+				
+				Object dreamService_bikeInsurance = parser.parse(new FileReader("/home/moritz/Downloads/TELIS_digital_insurance_track_data/bikeinsurance/dreamservice_bikeinsurance.json"));
+				System.out.println("json object: " + dreamService_bikeInsurance);
+				Object metropolica_bikeInsurance = parser.parse(new FileReader("metropolica_bikeinsurance.json"));
+				Object utopia_bikeInsurance = parser.parse(new FileReader("utopia_bikeinsurance.json"));
+				
+				JsonObject jsonObject = (JsonObject) dreamService_bikeInsurance;
+				JsonArray jsonArray= (JsonArray) jsonObject.getJsonArray("insurances");
+            
+				for(int i = 0; i < 8; i++) {
+					String bikeType = jsonArray.getJsonObject(i).getString("bike type");
+					System.out.println(bikeType);
+					String insurantType = jsonArray.getJsonObject(i).getString("student");
+					System.out.println(insurantType);
+					float premium = Float.parseFloat(jsonArray.getJsonObject(i).getString("premium_per_month"));
+					if ((binsurance.getBikeType().name() == bikeType)&&(binsurance.getBikeInsurantType().name() == insurantType)) {
+						FinalBikeInsurance finalBikeInsurance = new FinalBikeInsurance("DreamService", binsurance, premium);
+						bestInsurances.add(finalBikeInsurance);
+					}
+				}
+				
+				jsonObject = (JsonObject) metropolica_bikeInsurance;
+				jsonArray = (JsonArray) jsonObject.getJsonArray("insurances");
+				
+				for(int i = 0; i < 8; i++) {
+					String bikeType = jsonArray.getJsonObject(i).getString("bike type");
+					String insurantType = jsonArray.getJsonObject(i).getString("student");
+					float premium = Float.parseFloat(jsonArray.getJsonObject(i).getString("premium_per_month"));
+					if ((binsurance.getBikeType().name() == bikeType)&&(binsurance.getBikeInsurantType().name() == insurantType)) {
+						FinalBikeInsurance finalBikeInsurance = new FinalBikeInsurance("Metropolica", binsurance, premium);
+						bestInsurances.add(finalBikeInsurance);
+					}
+				}
+				
+				jsonObject = (JsonObject) utopia_bikeInsurance;
+				jsonArray = (JsonArray) jsonObject.getJsonArray("insurances");
+				
+				for(int i = 0; i < 8; i++) {
+					String bikeType = jsonArray.getJsonObject(i).getString("bike type");
+					System.out.println(bikeType);
+					String insurantType = jsonArray.getJsonObject(i).getString("student");
+					System.out.println(insurantType);
+					float premium = Float.parseFloat(jsonArray.getJsonObject(i).getString("premium_per_month"));
+					if ((binsurance.getBikeType().name() == bikeType)&&(binsurance.getBikeInsurantType().name() == insurantType)) {
+						FinalBikeInsurance finalBikeInsurance = new FinalBikeInsurance("Utopia", binsurance, premium);
+						bestInsurances.add(finalBikeInsurance);
+					}
+				}
+			}
+			catch(Exception e) {
+				System.out.println("Error!!!!!!!!11");
+			}
+		}
+		
+		Collections.sort(bestInsurances, new Comparator<FinalBikeInsurance>() {
+		    @Override
+		    public int compare(FinalBikeInsurance first, FinalBikeInsurance second) {
+		        return first.getPremium().compareTo(second.getPremium());
+		    }
+		});
+			
+		List<FinalInsuranceResponseDTO> finalInsurances = new LinkedList<FinalInsuranceResponseDTO>();
+		
+		//FinalInsuranceResponseDTO finalInsurance1 = new FinalInsuranceResponseDTO(bestInsurances.get(0).getName(),finalInsurances.get(0).getInsurance(),finalInsurances.get(0).getPremium());
+		//FinalInsuranceResponseDTO finalInsurance2 = new FinalInsuranceResponseDTO(bestInsurances.get(1).getName(),finalInsurances.get(1).getInsurance(),finalInsurances.get(1).getPremium());
+	
+		//finalInsurances.add(finalInsurance1);
+		//finalInsurances.add(finalInsurance2);
+		
+		return null;
+	}
+
+	@Override
+	public int compare(FinalBikeInsurance o1, FinalBikeInsurance o2) {
+		if(o1.getPremium() > o2.getPremium()) return 1;
+		if(o1.getPremium() == o2.getPremium()) return 0;
+		return -1;
+	}
+
+	
 }
+
+
