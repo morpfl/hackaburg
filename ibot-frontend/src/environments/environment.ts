@@ -15,10 +15,11 @@ export const environment = {
     getcartype: 'Car',
     getareatype: 'Car',
     getkilometers_per_year: 'Car',
-    getlivingspacesize: 'HomeContents',
-    getllivingstatus: 'HomeContents',
+    getlivingspacesize: 'Homecontents',
+    getllivingstatus: 'Homecontents',
     getage: 'Home',
     gethousetype: 'Home',
+    gethousesize: 'Home',
     gethome_insurance_amount: 'Home'
   },
   dataFields: [
