@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { isNumber, isString } from 'util';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,11 +8,14 @@ import { DialogResponse, Intent } from './dialogResponse.interface';
 import { environment } from 'src/environments/environment';
 import { Message } from './message.interface';
 import { InsuranceService } from '../insurance/insurance.service';
+import { Recommendation } from '../insurance/recommendation.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BotService {
+
+  results = new EventEmitter<Recommendation[]>();
 
   constructor(
     private http: HttpClient,
@@ -75,7 +78,7 @@ export class BotService {
     if (response.results === null || response.results.nlp === null || response.results.nlp.entities === null) {
       return;
     }
-    // if is not insurance type intent, have a look at given entities
+    // have a look at given entities
     for (const key in response.results.nlp.entities) {
       if (response.results.nlp.entities.hasOwnProperty(key)) {
         if (environment.dataFields.includes(key)) {
@@ -92,8 +95,9 @@ export class BotService {
           }).subscribe( resp => {
             if (resp.isFinished) {
               // FINISHED !!!
-              this.backend.getRecommendation().subscribe( recommendation => {
-                console.log(recommendation);
+              this.backend.getRecommendation().subscribe( recommendations => {
+                console.log(recommendations);
+                this.results.emit(recommendations);
               });
             }
           });

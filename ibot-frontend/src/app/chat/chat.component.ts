@@ -34,6 +34,7 @@ export class ChatComponent implements OnInit {
       if (!validator.isEmpty(msg, { irgnore_whitespace: true })) {
         this.botService.sendMessage(msg).subscribe(res => {
           if (res) {
+            this.botService.processIntent(res);
             this.bubbleList = this.bubbleList.concat(this.botService.getMessages(res));
           }
         });

@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { isNumber, isString } from 'util';
+import { InsuranceService } from '../insurance/insurance.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/internal/Observable';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +12,8 @@ import { isNumber, isString } from 'util';
 export class SessionService {
 
   constructor(
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private http: HttpClient
   ) { }
 
   getId(): string | null {
@@ -51,8 +56,21 @@ export class SessionService {
 
   start(): void {
     if (!this.active()) {
-      this.setId(Math.random().toString(36) + '-' + new Date().getTime().toString());
+      this.getNewId().subscribe( id => {
+        this.setId(id.toString());
+      });
     }
+  }
+
+  getNewId(): Observable<number> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.post<number>(
+      environment.apiBaseUrl + environment.apiStart, {}, httpOptions
+    );
   }
 
 }

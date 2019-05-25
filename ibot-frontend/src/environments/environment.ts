@@ -1,8 +1,9 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'localhost:8080/',
+  apiBaseUrl: '',
   apiInformation: 'api/information',
   apiRecommendation: 'api/recommendation',
+  apiStart: 'api/start',
   botRequestToken: 'ef7ac9da54b318ada90ed8c73eb29736',
   botBaseUrl: 'https://api.cai.tools.sap/build/v1/',
   botDialog: 'dialog',
@@ -14,10 +15,11 @@ export const environment = {
     getcartype: 'Car',
     getareatype: 'Car',
     getkilometers_per_year: 'Car',
-    getlivingspacesize: 'HomeContents',
-    getllivingstatus: 'HomeContents',
+    getlivingspacesize: 'Homecontents',
+    getllivingstatus: 'Homecontents',
     getage: 'Home',
     gethousetype: 'Home',
+    gethousesize: 'Home',
     gethome_insurance_amount: 'Home'
   },
   dataFields: [
