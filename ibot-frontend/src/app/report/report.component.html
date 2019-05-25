@@ -5,12 +5,32 @@
     <h2>I've got an isurance that fits on you!</h2>
   </div>
 </div>
-<div *ngIf="showLoader" class="sk-folding-cube">
-  <div class="sk-cube1 sk-cube"></div>
-  <div class="sk-cube2 sk-cube"></div>
-  <div class="sk-cube4 sk-cube"></div>
-  <div class="sk-cube3 sk-cube"></div>
-</div>
 <div *ngIf="showResult" class="result">
-  <h1 class="result-text">{{insurance}}</h1>
+  <div class="result-text">{{results[0].name}}</div>
+  <div class="dollar fade"><b>{{results[0].premium}}€ premium</b></div>
+  <br />
+  <div class="info">
+    <div class="list-type1">
+      <ol class="fade">
+        <span *ngIf><li *ngFor="let result of resultList" class="fade"><span>Formget Online Form Builder Create Online Forms</span></li></span>
+      </ol>
+    </div>
+    <br />
+  </div>
+  <hr *ngIf="showElements.length > 1" class="fade-hr" />
+  <h2 *ngIf="showElements.length > 2" class="table fade">Alternative</h2>
+  <div class="container-table">
+    <ul class="responsive-table">
+      <li *ngIf="showElements.length > 3" class="table-header fade">
+        <div class="col col-4">Insurance</div>
+        <div class="col col-4">Conditions</div>
+        <div class="col col-4">Saving</div>
+      </li>
+      <li *ngIf="showElements.length > 4" class="table-row fade">
+        <div class="col col-4">--Name--</div>
+        <div class="col col-4">--Conditions--</div>
+        <div class="col col-4">--Saving--</div>
+      </li>
+    </ul>
+  </div>
 </div>

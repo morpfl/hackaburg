@@ -19,6 +19,9 @@ export class BubbleComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.cdk.scrollTo({ bottom: 0 });
+    this.cdk.scrollToIndex(this.bubbleListSize - 1);
+    setTimeout(() => {
+      this.cdk.scrollToIndex(this.bubbleListSize - 1);
+    }, 100);
   }
 }
