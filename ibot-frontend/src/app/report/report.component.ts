@@ -34,6 +34,12 @@ export class ReportComponent implements OnInit, OnChanges {
             this.showElements.push(1);
             setTimeout(() => {
               this.showElements.push(1);
+              setTimeout(() => {
+                this.showElements.push(1);
+                setTimeout(() => {
+                  this.showElements.push(1);
+                }, 200);
+              }, 200);
             }, 200);
           }, 200);
         }, 200);
@@ -45,7 +51,7 @@ export class ReportComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.results) {
-      this.resultList = [[],[]];
+      this.resultList = [[], []];
       let e: string;
       for (let i = 0; i <= Math.min(1, this.results.length); i++) {
         if (this.type === 'Car') {
@@ -114,4 +120,4 @@ export class ReportComponent implements OnInit, OnChanges {
     this.appComp.showResults = false;
     this.appComp.clearChat();
   }
- }
+}
