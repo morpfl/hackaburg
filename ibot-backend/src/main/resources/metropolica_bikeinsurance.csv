@@ -1,0 +1,9 @@
+type;student;premium_per_month
+city bike;student;4.92
+city bike;non_student;6.0
+mountain bike;student;9.84
+mountain bike;non_student;12.0
+ebike;student;22.14
+ebike;non_student;27.0
+road bike;student;11.48
+road bike;non_student;14.0

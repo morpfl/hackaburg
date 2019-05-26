@@ -1,0 +1,25 @@
+id,type,student,premium_per_month,company
+1,city bike,student,11.04,Dreamservice
+2,city bike,non_student,12.0,Dreamservice
+3,mountain bike,student,8.28,Dreamservice
+4,mountain bike,non_student,9.0,Dreamservice
+5,ebike,student,29.44,Dreamservice
+6,ebike,non_student,32.0,Dreamservice
+7,road bike,student,11.04,Dreamservice
+8,road bike,non_student,12.0,Dreamservice
+9,city bike,student,4.92,Metropolica
+10,city bike,non_student,6.0,Metropolica
+11,mountain bike,student,9.84,Metropolica
+12,mountain bike,non_student,12.0,Metropolica
+13,ebike,student,22.14,Metropolica
+14,ebike,non_student,27.0,Metropolica
+15,road bike,student,11.48,Metropolica
+16,road bike,non_student,14.0,Metropolica
+17,city bike,student,4.0,Utopia
+18,city bike,non_student,5.0,Utopia
+19,mountain bike,student,12.0,Utopia
+20,mountain bike,non_student,15.0,Utopia
+21,ebike,student,20.0,Utopia
+22,ebike,non_student,25.0,Utopia
+23,road bike,student,12.0,Utopia
+24,road bike,non_student,15.0,Utopia
