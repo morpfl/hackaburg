@@ -96,12 +96,26 @@ export class BotService {
             key: key,
             value: mlEntity.data
           }).subscribe( resp => {
-            if (resp.isFinished) {
+            if (resp.finished) {
               // FINISHED !!!
-              this.backend.getRecommendation().subscribe( recommendations => {
+              /*this.backend.getRecommendation().subscribe( recommendations => {
                 console.log(recommendations);
                 this.results.emit(recommendations);
-              });
+              });*/
+              this.results.emit([
+                {
+                  name: 'Example Insurance',
+                  premium: 40,
+                  bikeType: 'MOUNTAIN_BIKE',
+                  insurantType: 'STUDENT'
+                },
+                {
+                  name: 'Total Insurance Ltd.',
+                  premium: 200,
+                  bikeType: 'MOUNTAIN_BIKE',
+                  insurantType: 'STUDENT'
+                }
+              ]);
             }
           });
         } else {
@@ -136,12 +150,26 @@ export class BotService {
               key: key,
               value: mlEntity.data
             }).subscribe( resp => {
-              if (resp.isFinished) {
+              if (resp.finished) {
                 // FINISHED !!!
-                this.backend.getRecommendation().subscribe( recommendations => {
+                /*this.backend.getRecommendation().subscribe( recommendations => {
                   console.log(recommendations);
                   this.results.emit(recommendations);
-                });
+                });*/
+                this.results.emit([
+                  {
+                    name: 'Example Insurance',
+                    premium: 40,
+                    bikeType: 'MOUNTAIN_BIKE',
+                    insurantType: 'STUDENT'
+                  },
+                  {
+                    name: 'Total Insurance Ltd.',
+                    premium: 200,
+                    bikeType: 'MOUNTAIN_BIKE',
+                    insured_amount: 'STUDENT'
+                  }
+                ]);
               }
             });
           }
