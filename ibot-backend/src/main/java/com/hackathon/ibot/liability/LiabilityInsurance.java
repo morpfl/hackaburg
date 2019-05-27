@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.hackathon.ibot.Conversation;
 import com.hackathon.ibot.Insurance;
 import com.hackathon.ibot.InsuranceType;
 
@@ -27,7 +28,7 @@ public class LiabilityInsurance extends Insurance {
 		return false;
 	}
 
-	public LiabilityInsurance(InsuranceType liability) {
-		super(liability);
+	public LiabilityInsurance(Conversation conversation, InsuranceType liability) {
+		super(conversation, liability);
 	}
 }

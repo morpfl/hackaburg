@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hackathon.ibot.bikeinsurance.BikeInsurance;
+import com.hackathon.ibot.bikeinsurance.BikeInsuranceData;
+import com.hackathon.ibot.bikeinsurance.BikeInsuranceRepository;
 import com.hackathon.ibot.bikeinsurance.BikeInsurantType;
 import com.hackathon.ibot.bikeinsurance.BikeType;
 import com.hackathon.ibot.carinsurance.AreaType;
@@ -37,16 +39,14 @@ import java.util.LinkedList;
 import javax.json.*;
 
 @Service
-public class ConversationService implements Comparator<FinalBikeInsurance>{
+public class ConversationService implements Comparator<FinalInsuranceResponseDTO>{
 	
+	@Autowired
 	private ConversationRepository repository;
-	
+	@Autowired
 	private InsuranceRepository insuranceRepository;
-	
-	public ConversationService(ConversationRepository repository, InsuranceRepository insuranceRepository) {
-		this.repository = repository;
-		this.insuranceRepository = insuranceRepository;
-	}
+	@Autowired
+	private BikeInsuranceRepository bikeInsuranceRepo;
 	
 	public boolean idExists(int id) {
 		List<Conversation> allConversations = (List<Conversation>) this.repository.findAll();
@@ -63,7 +63,7 @@ public class ConversationService implements Comparator<FinalBikeInsurance>{
 		Insurance insurance = null;
 		
 		if(!alreadyStartedInsuranceCalculation(request.getType(), conversation)) {
-			insurance = mapTypeToInsurance(request.getType());
+			insurance = mapTypeToInsurance(conversation, request.getType());
 			this.insuranceRepository.save(insurance);
 			conversation.addInsurance(insurance);
 			this.repository.save(conversation);
@@ -102,7 +102,6 @@ public class ConversationService implements Comparator<FinalBikeInsurance>{
 	}
 
 	private boolean hasNullField(int id, Insurance insurance, int index) {
-		System.out.println(this.repository.findById(id).orElse(null));
 		List<Insurance> insurances = this.repository.findById(id).orElse(null).getInsurances();
 		if(insurances.get(index).hasNullField()) return true;
 		return false;
@@ -198,53 +197,76 @@ public class ConversationService implements Comparator<FinalBikeInsurance>{
 		this.repository.save(conversation);
 	}
 
-	private Insurance mapTypeToInsurance(String type) {
+	private Insurance mapTypeToInsurance(Conversation conversation, String type) {
 		switch(type) {
 		case "Car":
-			System.out.println(type);
-			return new CarInsurance(InsuranceType.Car);
+			return new CarInsurance(conversation,InsuranceType.Car);
 		case "Bike":
-			return new BikeInsurance(InsuranceType.Bike);
+			return new BikeInsurance(conversation,InsuranceType.Bike);
 		case "Homecontents":
-			return new HomeContents(InsuranceType.Homecontents);
+			return new HomeContents(conversation,InsuranceType.Homecontents);
 		case "Home":
-			return new HomeInsurance(InsuranceType.Home);
+			return new HomeInsurance(conversation,InsuranceType.Home);
 		case "Liability":
-			return new LiabilityInsurance(InsuranceType.Liability);
+			return new LiabilityInsurance(conversation,InsuranceType.Liability);
 		default:
 			return null;
 		}
 	}
 
-	/*
-	public void testmethod() {
-		Conversation conversation = new Conversation(1);
-		this.repository.save(conversation);
-		System.out.println(this.repository.findById(1).orElse(null));
-		Insurance insurance = mapTypeToInsurance("Car");
-		this.insuranceRepository.save(insurance);
-	}
-*/
 	public int openConversation() {
 		Conversation conversation = new Conversation();
 		this.repository.save(conversation);
 		return conversation.getId(); 
 	}
 
-	public List<FinalInsuranceResponseDTO> calculateRecs(int id, String type) throws FileNotFoundException {
+	public List<FinalInsuranceResponseDTO> calculateRecs(int id, String type) {
+		Conversation conversation = this.findConversationById(id);
+		List<FinalInsuranceResponseDTO> finalInsurances = new LinkedList<FinalInsuranceResponseDTO>();
+		Insurance possInsurance = this.insuranceRepository.findInsuranceByConversationAndType(conversation, InsuranceType.valueOf(type));
+		switch(type) {
+		case "Bike":
+			BikeInsurance bikeInsurance = (BikeInsurance) possInsurance;
+			List<BikeInsuranceData> bikeInsurances = this.bikeInsuranceRepo.findByBikeTypeAndInsurantType(bikeInsurance.getBikeType(),bikeInsurance.getBikeInsurantType());
+			for(BikeInsuranceData data : bikeInsurances) {
+				FinalInsuranceResponseDTO dto = new FinalInsuranceResponseDTO(data.getCompany(),bikeInsurance,data.getPremium_per_month());
+				finalInsurances.add(dto);
+			}
+		}
 		
-		 
+		finalInsurances = prepareOutput(finalInsurances);
 		
+		return finalInsurances;
+	}
+
+	private List<FinalInsuranceResponseDTO> prepareOutput(List<FinalInsuranceResponseDTO> finalInsurances) {
+		Collections.sort(finalInsurances, new Comparator<FinalInsuranceResponseDTO>() {
+				@Override
+				public int compare(FinalInsuranceResponseDTO insurance1, FinalInsuranceResponseDTO insurance2) {
+					if(insurance1.getPremium() < insurance2.getPremium()) return -1;
+					if(insurance1.getPremium() > insurance2.getPremium()) return 1;
+					return 0;
+				}
+		});
+		
+		finalInsurances.remove(2);
+		return finalInsurances;
+	}
+
+	private Conversation findConversationById(int id) {
+		List<Conversation> allConversation = (List<Conversation>)this.repository.findAll();
+		for(Conversation singleConversation : allConversation) {
+			if(singleConversation.getId() == id) return singleConversation;
+		}
 		return null;
 	}
 
 	@Override
-	public int compare(FinalBikeInsurance o1, FinalBikeInsurance o2) {
-		if(o1.getPremium() > o2.getPremium()) return 1;
-		if(o1.getPremium() == o2.getPremium()) return 0;
-		return -1;
+	public int compare(FinalInsuranceResponseDTO insurance1, FinalInsuranceResponseDTO insurance2) {
+		if(insurance1.getPremium() < insurance2.getPremium()) return -1;
+		if(insurance1.getPremium() > insurance2.getPremium()) return 1;
+		return 0;
 	}
-
 	
 }
 

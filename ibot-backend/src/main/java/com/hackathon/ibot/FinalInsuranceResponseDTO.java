@@ -20,6 +20,6 @@ public class FinalInsuranceResponseDTO {
 	private Insurance insurance;
 	
 	@Getter @Setter
-	private Float premium;
+	private Double premium;
 	
 }

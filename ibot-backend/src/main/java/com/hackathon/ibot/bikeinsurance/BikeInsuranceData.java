@@ -3,10 +3,8 @@ package com.hackathon.ibot.bikeinsurance;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
-import com.hackathon.ibot.Conversation;
-import com.hackathon.ibot.Insurance;
-import com.hackathon.ibot.InsuranceType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,20 +14,20 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class BikeInsurance extends Insurance {
+public class BikeInsuranceData {
+	@Getter @Setter
+	@GeneratedValue @Id 
+	private int id;
 	
 	@Getter @Setter @Enumerated(EnumType.STRING)
 	private BikeType bikeType;
 	
 	@Getter @Setter @Enumerated(EnumType.STRING)
-	private BikeInsurantType bikeInsurantType;
+	private BikeInsurantType insurantType;
 	
-	public boolean hasNullField() {
-		if(bikeType == null || bikeInsurantType == null) return true;
-		return false;
-	}
-
-	public BikeInsurance(Conversation conversation, InsuranceType bike) {
-		super(conversation, bike);
-	}
+	@Getter @Setter
+	private double premium_per_month;
+	
+	@Getter @Setter
+	private String company;
 }
